@@ -1,5 +1,5 @@
-const express = require('express')
-const { default: mongoose } = require('mongoose')
+import express from "express"
+import mongoose from "mongoose"
 const app = express()
 const port = 3000
 async function condb() {
@@ -12,8 +12,8 @@ async function condb() {
 }
 condb();
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
+app.get('/user', (req, res) => {
+    res.send('Hello user!')
 })
 
 app.listen(port, () => {
