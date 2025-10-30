@@ -15,7 +15,7 @@ async function condb() {
 }
 condb();
 
-app.use("/user",createUser);
+app.use("/",createUser);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
