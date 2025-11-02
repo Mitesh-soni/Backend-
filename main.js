@@ -2,6 +2,7 @@ import express from "express"
 import mongoose from "mongoose"
 
 import createUser from "./route/user.route.js"
+import createEmployee from "./route/employee.route.js"
 const app = express()
 const port = 3000
 app.use(express.json());
@@ -16,6 +17,7 @@ async function condb() {
 condb();
 
 app.use("/",createUser);
+app.use("/",createEmployee);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
