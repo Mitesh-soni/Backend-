@@ -1,7 +1,7 @@
 import { json } from "express";
 import mongoose from "mongoose";
 
-const log1Schema = new mongoose.Schema({
+const log2Schema = new mongoose.Schema({
     trno: {
         type: Number
     },
@@ -12,10 +12,10 @@ const log1Schema = new mongoose.Schema({
         type: Number
     },
     status: {
-        type
+        type: String
     },
     jsonpara: {
-
+        type: Object
     },
     time: {
         type: Number
@@ -23,5 +23,5 @@ const log1Schema = new mongoose.Schema({
 
 })
 
-const intcmdq = mongoose.model('intcmdqt', log1Schema);
-export default intcmdq;
+const intcmdqt = mongoose.model('intcmdqt', log2Schema);
+export default intcmdqt;

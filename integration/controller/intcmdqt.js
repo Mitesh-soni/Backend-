@@ -1,6 +1,6 @@
 import intcmdqt from "../models/intcmdqt.js";
 
-export const intcmdqt = async(req, res) => {
+export const intcmdqtControler = async(req, res) => {
     try{
          const response = req.body;
         const newintcmdqt = new intcmdqt(response);

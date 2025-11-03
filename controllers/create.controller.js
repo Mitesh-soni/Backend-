@@ -1,6 +1,7 @@
 import emp from "../models/employee.js"
-// import intcmdqt from "../integration/models/intcmdqt.js";
-// import intcmdq from "../integration/models/intcmdq.js";
+import { intcmdqtControler } from "../integration/controller/intcmdqt.js";
+import { intcmdqController } from "../integration/controller/intcmdq.js";
+import { json } from "express";
 // import { connector } from "../integration/connector.js";
 
 export const createemp = async (req, res) => {
@@ -8,16 +9,27 @@ export const createemp = async (req, res) => {
         const empdata = req.body;
         const newEmp = new emp(empdata);
         const savedata = await newEmp.save();
-        // let intcmdq=await intcmdq(integrationdata);
-        // let intcmdqt=await intcmdqt(res);
-        // let connector=await connector(res);
-        if(!savedata ){
-            res.status(400).json("user was exist");
+        console.log(savedata + "This is prited by console");
+
+
+        if (!savedata) {
+           return res.status(400).json("user was exist");
         }
-        res.status(201).json({
-            employee: savedata
-        });
         
+        const integrationData = {
+            commandProviderLinkId: 1,
+            providerId: 1,
+            commandId: 1,
+            jsonpara:empdata
+        }
+        let intcmdqdata = await intcmdqController(integrationData);
+        // console.log(intcmdqdata,"here...");
+        let intcmdqtData=await intcmdqtControler(integrationData);
+        // let connector=await connector(integrationData);
+        return res.status(201).json({
+            employee: savedata,
+            integration: intcmdqdata
+        });
     }
     catch (err) {
         res.json(err);
