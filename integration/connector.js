@@ -1,4 +1,4 @@
-
+import mongoose from "mongoose";
 
 export const connector = async (req, res) => {
     try{

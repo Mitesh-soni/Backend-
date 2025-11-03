@@ -1,15 +1,19 @@
 import intcmdqt from "../models/intcmdqt.js";
 
-export const intcmdqtControler = async(req, res) => {
-    try{
-         const response = req.body;
-        const newintcmdqt = new intcmdqt(response);
+export const intcmdqtControler = async (integrationData, intcmdqdata) => {
+    try {
+        const { commandId, providerId, status, jsonpara: empdata } = integrationData;
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-IN', { hour12: true }); 
+        const newintcmdqt = new intcmdqt({ trno: intcmdqdata.trno, commandId, providerId, status, jsonpara: empdata, time: timeString });
         const intcmdqtData = await newintcmdqt.save();
-        res.status(201).json({
-            intcmdq : intcmdqtData
-        });
+        console.log(trno);
+        return {
+            success: true,
+            intcmdqt: intcmdqtData,
+        }
     }
-    catch(err){
-res.json(err)
+    catch (err) {
+        return { success: false, error: err.message };
     }
 }

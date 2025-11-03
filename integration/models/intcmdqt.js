@@ -18,7 +18,7 @@ const log2Schema = new mongoose.Schema({
         type: Object
     },
     time: {
-        type: Number
+        type: String
     }
 
 })

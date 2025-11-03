@@ -9,26 +9,28 @@ export const createemp = async (req, res) => {
         const empdata = req.body;
         const newEmp = new emp(empdata);
         const savedata = await newEmp.save();
-        console.log(savedata + "This is prited by console");
+        // console.log(savedata + "This is prited by console");
 
 
         if (!savedata) {
-           return res.status(400).json("user was exist");
+            return res.status(400).json("user was exist");
         }
-        
+
         const integrationData = {
             commandProviderLinkId: 1,
             providerId: 1,
             commandId: 1,
-            jsonpara:empdata
+            status: 1,
+            jsonpara: empdata
         }
         let intcmdqdata = await intcmdqController(integrationData);
         // console.log(intcmdqdata,"here...");
-        let intcmdqtData=await intcmdqtControler(integrationData);
+        let intcmdqtData = await intcmdqtControler(integrationData, intcmdqdata);
         // let connector=await connector(integrationData);
         return res.status(201).json({
             employee: savedata,
-            integration: intcmdqdata
+            intcmdq: intcmdqdata,
+            intcmdqt: intcmdqtData
         });
     }
     catch (err) {
