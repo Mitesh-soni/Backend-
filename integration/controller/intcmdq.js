@@ -14,6 +14,6 @@ export const intcmdqController = async (integrationData) => {
         };
     }
     catch(err){
-           res.json(err);
+           return { success: false, error: err.message };
     }
 }

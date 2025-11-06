@@ -12,7 +12,7 @@ const log2Schema = new mongoose.Schema({
         type: Number
     },
     status: {
-        type: String
+        type: Number
     },
     jsonpara: {
         type: Object
