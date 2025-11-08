@@ -1,16 +1,13 @@
-import { json } from "express";
-import mongoose from "mongoose";
+import { getintcmdqController } from "../getintegrationcommandq.js";
 
-export const authTokenController = async(getintegrationcommandqData)=>{
-    try{
-           const {authToken}=getintegrationcommandqData;
-           const token = authToken.token
-        //    console.log(token,"Authentication Token");
-           return {
-            authToken:token
-           };
-    }
-    catch{
-
-    }
-}
+export const authTokenController = async (getintegrationcommandqData) => {
+  try {
+    const {authToken} = getintegrationcommandqData;
+    const Token = authToken.token;
+    // console.log(Token);
+    return {Token};
+  } catch (err) {
+    console.error("Error in authTokenController:", err.message);
+    return { success: false, error: err.message };
+  }
+};

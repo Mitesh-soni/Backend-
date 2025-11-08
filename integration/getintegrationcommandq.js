@@ -4,6 +4,11 @@ export const getintcmdqController = async (integrationData) => {
     try {
         // console.log("before:", integrationData);
         const { commandProviderLinkId, providerId } = integrationData;
+
+        if (!commandProviderLinkId || !providerId) {
+            throw new Error("Missing commandProviderLinkId or providerId");
+        }
+
         const result = await mongoose.connection.collection("icommandproviderlink").findOne({
             commandProviderLinkId,
             providerId
@@ -12,7 +17,6 @@ export const getintcmdqController = async (integrationData) => {
         if (!result) {
             return { success: false, error: err.message };
         }
-
 
         const { jsonPara: url } = result;
         // console.log(url,"check url");
@@ -23,7 +27,6 @@ export const getintcmdqController = async (integrationData) => {
             return { success: false, error: err.message };
         }
 
-        
         const { jsonPara: authurl } = authTokenData;
         return {
             API: url,

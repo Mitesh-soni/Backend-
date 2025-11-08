@@ -1,7 +1,7 @@
 import intcmdqt from "../models/intcmdqt.js";
 import { connectorController } from "../connector.js";
 
-export const intcmdqtControler = async (integrationData, intcmdqdata) => {
+export const intcmdqtControler = async (integrationData, intcmdqdata,updatedData) => {
     try {
         const { commandId, providerId, status, jsonpara: empdata } = integrationData;
         const now = new Date();

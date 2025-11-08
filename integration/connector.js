@@ -4,15 +4,15 @@ import {createuserapiController} from  "./provider/createuserapi.js"
 import {callAllapiController} from "./provider/callallapi.js"
 export const connectorController = async (integrationData) => {
     try{
+
         // console.log("🔥 Integration data before connector:", integrationData);
         const getintegrationcommandqData = await getintcmdqController(integrationData);
         // console.log("connector file loaded successfully",getintegrationcommandqData);
-        const authTokenData = await authTokenController(getintegrationcommandqData);
+        const authTokenData = await authTokenController(getintegrationcommandqData)
+        const createuserapiData = await createuserapiController(integrationData,getintegrationcommandqData,authTokenData);
 
-        const userapiData = await createuserapiController(integrationData,getintegrationcommandqData);
-
-        const callallapiData = await  callAllapiController(userapiData,authTokenData)
-        return {getintegrationcommandqData,authTokenData,userapiData,callallapiData};
+        const callallapiData = await  callAllapiController(createuserapiData,integrationData)
+        return {getintegrationcommandqData,authTokenData,createuserapiData,callallapiData};
         }
     catch(err){
            return { success: false, error: err.message };
