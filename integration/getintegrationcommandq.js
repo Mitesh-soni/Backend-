@@ -2,7 +2,6 @@ import mongoose, { mongo } from "mongoose";
 
 export const getintcmdqController = async (integrationData) => {
     try {
-        // console.log("before:", integrationData);
         const { commandProviderLinkId, providerId } = integrationData;
 
         if (!commandProviderLinkId || !providerId) {
@@ -19,10 +18,12 @@ export const getintcmdqController = async (integrationData) => {
         }
 
         const { jsonPara: url } = result;
-        // console.log(url,"check url");
+        
+        //Find authTokenData in iprovider collection where providerId 
         const authTokenData = await mongoose.connection.collection("iprovider").findOne({
             providerId
         })
+
         if (!authTokenData) {
             return { success: false, error: err.message };
         }

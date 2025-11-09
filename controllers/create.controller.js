@@ -2,8 +2,6 @@ import emp from "../models/employee.js"
 import { intcmdqtControler } from "../integration/controller/intcmdqt.js";
 import { intcmdqController } from "../integration/controller/intcmdq.js";
 import { connectorController } from "../integration/connector.js";
-import { json } from "express";
-// import { connector } from "../integration/connector.js";
 
 export const createemp = async (req, res) => {
     try {
@@ -21,7 +19,7 @@ export const createemp = async (req, res) => {
             commandProviderLinkId: 1,
             providerId: 1,
             commandId: 1,
-            statusId: 1,
+            status: 1,
             jsonpara: empdata
         }
         let intcmdqdata = await intcmdqController(integrationData);
@@ -29,7 +27,7 @@ export const createemp = async (req, res) => {
         //intcmdqdata is store trno that is used in intcmdqt 
         let intcmdqtData = await intcmdqtControler(integrationData, intcmdqdata);
         //
-        let connectorControllerData=await connectorController(integrationData);
+        let connectorControllerData=await connectorController(integrationData,intcmdqdata);
         console.log(connectorControllerData);
         return res.status(201).json({
             employee: savedata,
