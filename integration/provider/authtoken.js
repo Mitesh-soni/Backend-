@@ -1,31 +1,24 @@
 import axios from "axios";
 import { getintcmdqController } from "../getintegrationcommandq.js"
 
-export const authTokenController = async (integrationData) => {
+export const authTokenController = async (getintCmdqData) => {
   try {
-    if (!integrationData) {
+    if (!getintCmdqData) {
       throw new Error("Missing integrationData in authTokenController");
     }
-    //call: getintcmdqController
-    const { authToken } = await getintcmdqController(integrationData);
 
-    if (!authToken) {
-      throw new Error("No authToken data returned from getintcmdqController");
-    }
-
-    //token or url filter from authToken
-    const Token = authToken?.token;
-    const url = authToken?.url;
+    const { token, url } = getintCmdqData.authToken;
 
     if (!url) {
       throw new Error("Auth URL is missing in authToken");
     }
-
+    console.log(url);
     //fetch token 
     const response = await axios({
+      method: "GET",
       url,
       headers: {
-        Authorization: `Bearer ${Token || ""}`
+        Authorization: `Bearer ${token || ""}`
       }
     })
 

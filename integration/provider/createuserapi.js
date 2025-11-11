@@ -1,34 +1,43 @@
 import mongoose from "mongoose"
 import { authTokenController } from "./authtoken.js";
-export const createuserapiController = async (integrationData, getintegrationcommandqData) => {
+import { callAllapiController } from "./callallapi.js";
+export const createuserapiController = async (integrationData, getintCmdqData) => {
     try {
-        if (!getintegrationcommandqData?.API) {
+        if (!getintCmdqData?.API) {
             throw new Error("Missing API details in 'getintegrationcommandqData'");
         }
         const Data = integrationData.jsonpara;
 
-        const { API } = getintegrationcommandqData;
+        const { API } = getintCmdqData;
+        // console.log(API);
 
-        const ApiUrl = getintegrationcommandqData.API?.url;
-        const Method = getintegrationcommandqData.API?.method || "POST";
+        const ApiUrl = API?.url;
+        const Method = API?.method;
 
-        if (!ApiUrl) {
-            throw new Error("API URL is missing in integration command data");
+        if (!ApiUrl || !Method) {
+            throw new Error("API URL or Method is missing in integration command data");
         }
-        const { Token, success, error } = await authTokenController(integrationData);
+        const { Token, success, error } = await authTokenController(getintCmdqData);
 
         if (success === false || !Token) {
             throw new Error(error || "Failed to retrieve auth token");
         }
-        return {
-            success: true,
-            Token,
+        const userData = {
+            Data,
             ApiUrl,
             Method,
-            Data
+            Token
+        }
+        const callallapiData = await callAllapiController(userData);
+        console.log("Check api success or fail", callallapiData);
+        return {
+            success: true,
+            userData,
+            Response: callallapiData.data,
+            status: callallapiData.status
         }
     }
     catch (err) {
-        return{success: false,error: err.message}
+        return { success: false, error: err.message }
     }
 }

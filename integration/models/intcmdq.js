@@ -28,6 +28,7 @@ log1Schema.pre("save", async function (next) {
     this.trno = counter.seq;     // assign the new number
   }
   next();
+  console.log("Creating intcmdq with trno:", newTrno, "at", new Date().toISOString());
 });
 
 const intcmdq = mongoose.model("intcmdq", log1Schema);

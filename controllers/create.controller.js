@@ -25,9 +25,9 @@ export const createemp = async (req, res) => {
         let intcmdqdata = await intcmdqController(integrationData);
         // console.log(intcmdqdata,"here...");
         //intcmdqdata is store trno that is used in intcmdqt 
-        let intcmdqtData = await intcmdqtControler(integrationData, intcmdqdata);
-        //
-        let connectorControllerData=await connectorController(integrationData,intcmdqdata);
+        let intcmdqtData = await intcmdqtControler({...integrationData,trno: intcmdqdata.data.trno});
+
+        let connectorControllerData = await connectorController(integrationData, intcmdqdata, intcmdqdata.trno);
         console.log(connectorControllerData);
         return res.status(201).json({
             employee: savedata,

@@ -1,19 +1,24 @@
 import intcmdqt from "../models/intcmdqt.js";
 import { connectorController } from "../connector.js";
 
-export const intcmdqtControler = async (integrationData, intcmdqdata, updatedData) => {
+export const intcmdqtControler = async (sourceData, apiHitData, finalData) => {
     try {
-        const { commandId, providerId, status, jsonpara: empdata } = integrationData || updatedData;
+        const currSourceData = apiHitData || finalData || sourceData;
         const now = new Date();
-        const timeString = now.toLocaleTimeString('en-IN', { hour12: true });
-        const newintcmdqt = new intcmdqt({ trno: intcmdqdata.trno, commandId, providerId, status, jsonpara: empdata, time: timeString });
+        const currentTIme = now.toLocaleTimeString('en-IN', { hour12: true });
+        const { trno, commandId, providerId, status, jsonpara } = currSourceData;
+        const newintcmdqt = new intcmdqt({
+            trno,
+            commandId,
+            providerId,
+            status,
+            jsonpara: jsonpara,
+            time: currentTIme
+        });
         const intcmdqtData = await newintcmdqt.save();
-        // console.log(intcmdqdata.trno);
-        let conectorData = await connectorController(integrationData);
         return {
             success: true,
             intcmdqt: intcmdqtData,
-            conector: conectorData
         }
     }
     catch (err) {
