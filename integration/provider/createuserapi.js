@@ -1,6 +1,6 @@
-import mongoose from "mongoose"
 import { authTokenController } from "./authtoken.js";
 import { callAllapiController } from "./callallapi.js";
+
 export const createuserapiController = async (integrationData, getintCmdqData) => {
     try {
         if (!getintCmdqData?.API) {

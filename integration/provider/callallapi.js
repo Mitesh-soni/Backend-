@@ -6,7 +6,7 @@ export const callAllapiController = async (userData) => {
     const response = await axios({
       method: Method,
       url: ApiUrl,
-      data: Data,
+      data: Data||{},
       headers: {
         Authorization: `Bearer ${Token}`
       }

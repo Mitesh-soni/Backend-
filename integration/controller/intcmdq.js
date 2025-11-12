@@ -2,8 +2,8 @@ import intcmdq from "../models/intcmdq.js";
 
 export const intcmdqController = async (integrationData) => {
     try{
-        const {jsonpara:empdata,commandId,providerId} = integrationData;
-        const newintcmdq = new intcmdq({commandId,providerId,jsonpara:empdata});
+        const {jsonpara,commandId,providerId} = integrationData;
+        const newintcmdq = new intcmdq({commandId,providerId,jsonpara});
         const intcmdqData = await newintcmdq.save();
         // console.log(empdata,"empdata");
         console.log("log created succesfully")
