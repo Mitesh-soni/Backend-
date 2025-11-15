@@ -12,7 +12,8 @@ export const authTokenController = async (getintCmdqData) => {
     if (!url) {
       throw new Error("Auth URL is missing in authToken");
     }
-    console.log(url);
+    // console.log(url);
+
     //fetch token 
     const response = await axios({
       method: "GET",

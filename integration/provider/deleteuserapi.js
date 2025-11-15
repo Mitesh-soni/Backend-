@@ -4,40 +4,35 @@ import { callAllapiController } from "./callallapi.js";
 export const deleteUserApiController = async (integrationData, getintCmdqData) => {
     try {
         if (!getintCmdqData?.API) {
-            throw new Error("Missing API details in 'getintegrationcommandqData'");
+            throw new Error("Missing API details in 'getintegrationcommandqData'deleteuserapi");
         }
-        const Data = integrationData.jsonpara;
+        const { jsonpara } = integrationData;
+        const { id } = jsonpara;
+        console.log(id);
 
         const { API } = getintCmdqData;
-        // console.log(API);
 
         const ApiUrl = API?.url;
         const Method = API?.method;
         if (!ApiUrl || !Method) {
             throw new Error("API URL or Method is missing in integration command data");
         }
-        const finalurl = ApiUrl
-        if(Method==="DELETE"&& Data){
-            const key = object.keys[0];
-            console.log(key)
-            const value = object.value[0];
-            console.log(value)
-            finalurl =`${ApiUrl}/${key}/${value}`
-        }
-
         const { Token, success, error } = await authTokenController(getintCmdqData);
         if (success === false || !Token) {
             throw new Error(error || "Failed to retrieve auth token");
         }
-
+        const finalUrl = ApiUrl.replace("<<delete>>", id);
+        // console.log("API URL BEFORE REPLACE:", ApiUrl);
+        // console.log("API URL AFTER REPLACE:", finalUrl);
+        // console.log("METHOD:", Method);
         const userData = {
-            ApiUrl:finalurl,
+            ApiUrl: finalUrl,
             Method,
             Token
         }
 
         const callallapiData = await callAllapiController(userData);
-        console.log("Check api success or fail", callallapiData);
+        console.log("Check api success or fail", callallapiData.status);
         return {
             success: true,
             userData,

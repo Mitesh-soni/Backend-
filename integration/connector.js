@@ -2,6 +2,9 @@ import { getintcmdqController } from "./getintegrationcommandq.js";
 import { createuserapiController } from "./provider/createuserapi.js";
 import { intcmdqtControler } from "./controller/intcmdqt.js";
 import { deleteUserApiController } from "./provider/deleteuserapi.js";
+import { getUserApiController } from "./provider/getuserapi.js"
+import { putUserApiController } from "./provider/putuserapi.js";
+
 export const connectorController = async (integrationData, intcmdqdata, trno) => {
     try {
         //validation
@@ -40,43 +43,55 @@ export const connectorController = async (integrationData, intcmdqdata, trno) =>
 
         let userApiData;
         let deleteuserApiData;
+        let getApiData;
+        let putApiData;
 
-        if (method === "POST" && commandId === 1) {
+        if (method === "POST") {
             userApiData = await createuserapiController(integrationData, getintCmdqData);
+            if (!userApiData) throw new Error("User API creation failed");
         }
-        else if(method === "DELETE" && commandId === 4)
-        deleteuserApiData = await deleteUserApiController(integrationData, getintCmdqData)
-
-        const responseApiData = userApiData|| deleteuserApiData
-
-        const checkStatus = responseApiData.success;
+        else if (method === "GET") {
+            getApiData = await getUserApiController(integrationData, getintCmdqData);
+            if (!getApiData) throw new Error("User API get failed")
+        }
+        else if (method === "PUT") {
+            putApiData = await putUserApiController(integrationData, getintCmdqData);
+            if (!putApiData) throw new Error("User API get failed")
+        }
+        else if (method === "DELETE") {
+            deleteuserApiData = await deleteUserApiController(integrationData, getintCmdqData);
+            if (!deleteuserApiData) throw new Error("User API delete failed");
+        }
+        const responseApiData = userApiData || deleteuserApiData || getApiData || putApiData;
+        const status = responseApiData.status;
         const responseData = responseApiData.Response;
-        if (!userApiData) throw new Error("User API creation failed");
-        console.log(checkStatus);
-        if (checkStatus === true) {
-            const finalData = {
-                trno,
+
+        // console.log(checkStatus);
+        if (status === 200 || status === 201) {
+            const apiSuccessData = {
+                trno: trno,
                 commandId,
                 providerId,
                 status: 3,
-                jsonpara: { ...jsonData, ...responseData}
-            };
-            await intcmdqtControler(finalData);
-        }
-        else {
-            const finalData = {
-                trno,
+                jsonpara: { ...jsonData, ...responseData }
+            }
+            await intcmdqtControler(apiSuccessData);
+        } else {
+            const apiFailData = {
+                trno: trno,
                 commandId,
                 providerId,
                 status: 4,
                 jsonpara: { ...jsonData, ...responseData }
-            };
-            await intcmdqtControler(finalData);
+            }
+            await intcmdqtControler(apiFailData);
         }
 
         return {
             getintCmdqData,
             userApiData,
+            deleteuserApiData,
+            responseApiData
         };
     }
     catch (err) {

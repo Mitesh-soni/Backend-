@@ -5,27 +5,24 @@ import { connectorController } from "../integration/connector.js";
 
 export const deleteemp = async (req, res) => {
   try {
-    const { key, value } = req.params;
+    const { id } = req.params;
 
-    if (!key || !value) {
+    if (!id) {
       return res.status(400).json({ message: "Key or value missing in request params" });
     }
 
-    const filter = { [key]: value };
-
     // Step 1: Delete employee
-    const deletedEmp = await emp.findOneAndDelete(filter);
+    const deletedEmp = await emp.findOneAndDelete({ userId: id });
 
     if (!deletedEmp) {
       return res.status(404).json({ message: "Employee not found" });
     }
-
     const integrationData = {
-      commandProviderLinkId: 4, 
+      commandProviderLinkId: 4,
       providerId: 1,
       commandId: 4,
       status: 1,
-      jsonpara: filter,
+      jsonpara: {id},
     };
 
     const intcmdqdata = await intcmdqController(integrationData);
