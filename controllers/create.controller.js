@@ -23,12 +23,15 @@ export const createemp = async (req, res) => {
             jsonpara: empdata
         }
         let intcmdqdata = await intcmdqController(integrationData);
+        let  trno = intcmdqdata.data.trno
         let intcmdqtData = await intcmdqtControler({
             ...integrationData,
-            trno: intcmdqdata.data.trno
+            trno: trno
         });
+  
+        integrationData = integrationData.trno
 
-        let connectorControllerData = await connectorController(integrationData, intcmdqdata, intcmdqdata.trno);
+        let connectorControllerData = await connectorController(integrationData);
         console.log(connectorControllerData);
         return res.status(201).json({
             employee: savedata,

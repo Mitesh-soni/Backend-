@@ -5,12 +5,15 @@ import { deleteUserApiController } from "./provider/deleteuserapi.js";
 import { getUserApiController } from "./provider/getuserapi.js"
 import { putUserApiController } from "./provider/putuserapi.js";
 
-export const connectorController = async (integrationData, intcmdqdata, trno) => {
+export const connectorController = async (integrationData) => {
     try {
         //validation
         if (!integrationData || !integrationData.providerId || !integrationData.commandProviderLinkId) {
             throw new Error("Invalid or missing integration data");
         }
+        
+        const { commandId, providerId, jsonpara } = intcmdqdata.data || {};
+        const itrno = integrationData.trno
 
         // Step 1: Fetch integrationcommandqueue data
         const getintCmdqData = await getintcmdqController(integrationData);
@@ -29,11 +32,11 @@ export const connectorController = async (integrationData, intcmdqdata, trno) =>
             url,
             method
         }
-        const { commandId, providerId, jsonpara } = intcmdqdata.data || {};
+
         // console.log(trno, "trno");
         // console.log(empdata,"empData");
         const apiHitData = {
-            trno: trno,
+            trno: itrno,
             commandId,
             providerId,
             status: 2,
@@ -46,19 +49,19 @@ export const connectorController = async (integrationData, intcmdqdata, trno) =>
         let getApiData;
         let putApiData;
 
-        if (method === "POST") {
+        if (commandId === 1) {
             userApiData = await createuserapiController(integrationData, getintCmdqData);
             if (!userApiData) throw new Error("User API creation failed");
         }
-        else if (method === "GET") {
+        else if (commandId === 2) {
             getApiData = await getUserApiController(integrationData, getintCmdqData);
             if (!getApiData) throw new Error("User API get failed")
         }
-        else if (method === "PUT") {
+        else if (commandId === 3) {
             putApiData = await putUserApiController(integrationData, getintCmdqData);
             if (!putApiData) throw new Error("User API get failed")
         }
-        else if (method === "DELETE") {
+        else if (commandId === 4) {
             deleteuserApiData = await deleteUserApiController(integrationData, getintCmdqData);
             if (!deleteuserApiData) throw new Error("User API delete failed");
         }
@@ -67,7 +70,7 @@ export const connectorController = async (integrationData, intcmdqdata, trno) =>
         const responseData = responseApiData.Response;
 
         // console.log(checkStatus);
-        if (status === 200 || status === 201) {
+        if (status === 200) {
             const apiSuccessData = {
                 trno: trno,
                 commandId,
