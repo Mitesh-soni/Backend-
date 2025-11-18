@@ -7,7 +7,7 @@ export const updateemp = async (req, res) => {
     try {
         const { id } = req.params;
         const setData = req.body
-        const empUpdated = await emp.findOneAndUpdate({userId:id}, { setData }, { new: true });
+        const empUpdated = await emp.findOneAndUpdate({userId:id}, { $set:setData }, { new: true });
         if (!empUpdated) {
            return res.json(`message: ${id} was not in entire modle`)
         }
@@ -16,19 +16,16 @@ export const updateemp = async (req, res) => {
                     providerId: 1,
                     commandId: 3,
                     status: 1,
-                    jsonpara: { id },
+                    jsonpara: { id },setData,
                 };
         
                 const intcmdqdata = await intcmdqController(integrationData);
+                 let  trno = intcmdqdata?.data?.trno
                 const intcmdqtData = await intcmdqtControler({
                     ...integrationData,
-                    trno: intcmdqdata?.data?.trno,
+                    trno: trno,
                 });
-                const connectorControllerData = await connectorController(
-                    integrationData,
-                    intcmdqdata,
-                    intcmdqdata?.data?.trno
-                );
+                const connectorControllerData = await connectorController(integrationData);
         res.json({
             empUpdated,
             intcmdq: intcmdqdata,

@@ -26,16 +26,13 @@ export const deleteemp = async (req, res) => {
     };
 
     const intcmdqdata = await intcmdqController(integrationData);
+     let  trno = intcmdqdata?.data?.trno
     const intcmdqtData = await intcmdqtControler({
       ...integrationData,
-      trno: intcmdqdata?.data?.trno,
+      trno: trno
     });
 
-    const connectorControllerData = await connectorController(
-      integrationData,
-      intcmdqdata,
-      intcmdqdata?.data?.trno
-    );
+    const connectorControllerData = await connectorController(integrationData);
 
 
     return res.status(200).json({

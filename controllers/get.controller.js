@@ -16,15 +16,12 @@ export const getemp = async (req, res) => {
         };
 
         const intcmdqdata = await intcmdqController(integrationData);
+         let  trno = intcmdqdata?.data?.trno
         const intcmdqtData = await intcmdqtControler({
             ...integrationData,
-            trno: intcmdqdata?.data?.trno,
+            trno: trno
         });
-        const connectorControllerData = await connectorController(
-            integrationData,
-            intcmdqdata,
-            intcmdqdata?.data?.trno
-        );
+        const connectorControllerData = await connectorController(integrationData);
         res.json({
             message : "Data fetched succesfully",
             getEmp,

@@ -11,7 +11,7 @@ export const createUser = async (req, res) => {
         const userdata = req.body
         const user = new User(userdata);
         const savedata = await user.save();
-        res.status(201).json(savedata);
+        res.status(200).json(savedata);
     }
     catch (err) {
         res.json(err)
@@ -23,7 +23,7 @@ export const getUser = async (req, res) => {
     try {
         const { id } = req.params;
         const User = await user.findOne({userId:id});
-        res.json(User);
+        res.status(200).json(User);
     }
     catch (err) {
         res.json(err)
@@ -35,7 +35,7 @@ export const updateUser = async (req, res) => {
     try {
         const { id } = req.params;
         const updateuser = await User.findOneAndUpdate({userId:id}, { $set: req.body }, { new: true });
-        res.json(updateuser);
+        res.status(200).json(updateuser);
     }
     catch (err) {
         res.json(err)

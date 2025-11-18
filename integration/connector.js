@@ -12,7 +12,7 @@ export const connectorController = async (integrationData) => {
             throw new Error("Invalid or missing integration data");
         }
         
-        const { commandId, providerId, jsonpara } = intcmdqdata.data || {};
+        const { commandId, providerId, jsonpara } = integrationData || {};
         const itrno = integrationData.trno
 
         // Step 1: Fetch integrationcommandqueue data
@@ -65,6 +65,9 @@ export const connectorController = async (integrationData) => {
             deleteuserApiData = await deleteUserApiController(integrationData, getintCmdqData);
             if (!deleteuserApiData) throw new Error("User API delete failed");
         }
+        else{
+            throw new Error("issue in commandId")
+        }
         const responseApiData = userApiData || deleteuserApiData || getApiData || putApiData;
         const status = responseApiData.status;
         const responseData = responseApiData.Response;
@@ -72,7 +75,7 @@ export const connectorController = async (integrationData) => {
         // console.log(checkStatus);
         if (status === 200) {
             const apiSuccessData = {
-                trno: trno,
+                trno: itrno,
                 commandId,
                 providerId,
                 status: 3,
@@ -81,7 +84,7 @@ export const connectorController = async (integrationData) => {
             await intcmdqtControler(apiSuccessData);
         } else {
             const apiFailData = {
-                trno: trno,
+                trno: itrno,
                 commandId,
                 providerId,
                 status: 4,

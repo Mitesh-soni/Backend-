@@ -1,13 +1,15 @@
 import { authTokenController } from "./authtoken.js";
 import { callAllapiController } from "./callallapi.js";
 
-export const putUserApiController = async (integrationData, getintCmdqData) => {
+export const putUserApiController = async (integrationData,getintCmdqData) => {
     try {
         if (!getintCmdqData?.API) {
-            throw new Error("Missing API details in 'getintegrationcommandqData'deleteuserapi");
+            throw new Error("Missing API details in 'getintegrationcommandqData'putUserApi");
         }
-        const { jsonpara } = integrationData;
+        console.log(getintCmdqData);
+        const { jsonpara ,setData} = integrationData;
         const { id } = jsonpara;
+        const Data = setData;
         console.log(id);
 
         const { API } = getintCmdqData;
@@ -21,11 +23,13 @@ export const putUserApiController = async (integrationData, getintCmdqData) => {
         if (success === false || !Token) {
             throw new Error(error || "Failed to retrieve auth token");
         }
-        const finalUrl = ApiUrl.replace("<<put>>", id);
+        const finalUrl = ApiUrl.replace("<<update>>", id);
+        
         // console.log("API URL BEFORE REPLACE:", ApiUrl);
         // console.log("API URL AFTER REPLACE:", finalUrl);
         // console.log("METHOD:", Method);
         const userData = {
+            Data,
             ApiUrl: finalUrl,
             Method,
             Token

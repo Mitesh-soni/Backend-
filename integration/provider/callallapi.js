@@ -3,6 +3,7 @@ import axios from "axios"
 export const callAllapiController = async (userData) => {
   try {
     const { Data, ApiUrl, Method, Token } = userData;
+    console.log(Data, ApiUrl, Method, Token )
     const response = await axios({
       method: Method,
       url: ApiUrl,

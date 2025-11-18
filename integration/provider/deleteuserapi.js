@@ -1,14 +1,14 @@
 import { authTokenController } from "./authtoken.js";
 import { callAllapiController } from "./callallapi.js";
 
-export const deleteUserApiController = async (integrationData, getintCmdqData) => {
+export const deleteUserApiController = async (integrationData,getintCmdqData) => {
     try {
         if (!getintCmdqData?.API) {
             throw new Error("Missing API details in 'getintegrationcommandqData'deleteuserapi");
         }
         const { jsonpara } = integrationData;
         const { id } = jsonpara;
-        console.log(id);
+        // console.log(id);
 
         const { API } = getintCmdqData;
 
